@@ -18,10 +18,8 @@
     <ClCompile Include="MyPvZInC.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="D:\pvz\植物大战僵尸-无名版1.2.4 beta7\images\titlescreen.jpg">
-      <Filter>资源文件</Filter>
-    </Image>
+    <ClCompile Include="common.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
