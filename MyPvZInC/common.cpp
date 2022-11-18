@@ -6,13 +6,15 @@
 #include <stdlib.h>
 #define WindowWidth 1100
 #define WindowHeight 800
+static int x[45] = { 262,337,415,496,584,664,742,821,902,261,338,416,497,584,664,742,821,906,261,337,415,501,584,664,741,821,911,261,337,420,501,580,664,742,821,911,257,337,425,501,584,664,742,821,911 };
+static int y[45] = { 91 ,87 ,87, 87, 87, 87, 91, 91, 95, 188, 188, 188, 188, 188, 188, 188, 193, 193, 285, 285, 285, 292, 292, 292, 291, 292, 292 ,385, 385, 389, 389, 389, 389, 389, 389, 389, 479 ,479 ,479 ,483 ,483 ,483 ,483 ,483, 483 };
 
 
 typedef struct Plant
 {
 	char name[100];
 	char image_path[200];
-	int x,y;
+	int position;
 	int blood;
 	int attack_force;
 	int attack_speed;
@@ -23,6 +25,7 @@ typedef struct Zombie
 {
 	char name[100];
 	int x, y;
+	int line;
 	int blood;
 	int attack_force;
 	int attack_speed;

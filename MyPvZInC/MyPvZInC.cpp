@@ -1,5 +1,4 @@
 ﻿#include "common.cpp"
-int weizhi(void)
 int play(void);
 int main()
 {
@@ -30,28 +29,46 @@ int play(void)
 	Plant pea_shooter;
 	strcpy(pea_shooter.name, "pea_shooter");
 	strcpy(pea_shooter.image_path, ".\\img\\Peashooter.gif");
-	pea_shooter.x = 262;
-	pea_shooter.y = 285;
+	// 初始位置
+	pea_shooter.position = 2 * 9 + 1; //第三行第一个
 	pea_shooter.blood = 100;
 	IMAGE pea_shooter_img;
 	loadimage(&pea_shooter_img, L".\\img\\Peashooter.gif");
 	//暂时不考虑透明贴图问题和GIF动画问题
-	putimage(pea_shooter.x, pea_shooter.y, &pea_shooter_img);
+	putimage(x[pea_shooter.position-1], y[pea_shooter.position-1], &pea_shooter_img);
 	//drawAlpha(&pea_shooter_img, pea_shooter.x, pea_shooter.y,);
 	ExMessage m;
 	while (1) {
-		getmessage(&m, EX_KEY);
-		if (m.vkcode == 'W') //W键
+		char key = _getch();
+		if (key == 'w') //W键
 		{
-			pea_shooter.y -= 10;
-			
-			putimage(pea_shooter.x, pea_shooter.y, &pea_shooter_img);
+			if (pea_shooter.position >= 9) { // 不是第一行
+				pea_shooter.position -= 9; // 上移一行
+				putimage(x[pea_shooter.position - 1], y[pea_shooter.position], &pea_shooter_img);
+			}
+		}
+		if (key == 'a') //A键
+		{
+			if (pea_shooter.position % 9 != 1) { // 不是第一列
+				pea_shooter.position -= 1; // 左移一列
+				putimage(x[pea_shooter.position - 1], y[pea_shooter.position], &pea_shooter_img);
+			}
+		}
+		if (key == 's') //S键
+		{
+			if (pea_shooter.position <= 36) { // 不是第五行
+				pea_shooter.position += 9; // 下移一行
+				putimage(x[pea_shooter.position - 1], y[pea_shooter.position], &pea_shooter_img);
+			}
+		}
+		if (key == 'd') //D键
+		{
+			if (pea_shooter.position % 9 != 0) { // 不是第九列
+				pea_shooter.position += 1; // 右移一列
+				putimage(x[pea_shooter.position - 1], y[pea_shooter.position], &pea_shooter_img);
+			}
 		}
 	}
 	return 0;
 }
-int weizhi(void)
-{
-	int x[45] = { 262,337,415,496,584,664,742,821,902,261,338,416,497,584,664,742,821,906,261,337,415,501,584,664,741,821,911,261,337,420,501,580,664,742,821,911,257,337,425,501,584,664,742,821,911 };
-	int y[45] = { 91 ,87 ,87, 87, 87, 87, 91, 91, 95, 188, 188, 188, 188, 188, 188, 188, 193, 193, 285, 285, 285, 292, 292, 292, 291, 292, 292 ,385, 385, 389, 389, 389, 389, 389, 389, 389, 479 ,479 ,479 ,483 ,483 ,483 ,483 ,483, 483 }
-}
+
