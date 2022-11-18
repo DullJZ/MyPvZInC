@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <Windows.h>
 #include <string.h>
+#include <stdlib.h>
 #define WindowWidth 1100
 #define WindowHeight 800
 
@@ -34,6 +35,7 @@ typedef struct Bullet
 	int fly_speed;
 } Bullet;
 
+/*
 // »æÍ¼º¯Êý£¬²¹³äÍ¸Ã÷¶È
 // https://www.cnblogs.com/Bluemultipl/p/15947876.html
 void drawAlpha(IMAGE* image, int x, int y, int width, int height, int pic_x, int pic_y, double AA = 1)
@@ -76,3 +78,5 @@ void drawAlpha(IMAGE* image, int x, int y, int width, int height, int pic_x, int
 		}
 	}
 }
+*/
+
