@@ -44,28 +44,28 @@ int play(void)
 		{
 			if (pea_shooter.position >= 9) { // 不是第一行
 				pea_shooter.position -= 9; // 上移一行
-				putimage(x[pea_shooter.position - 1], y[pea_shooter.position], &pea_shooter_img);
+				putimage(x[pea_shooter.position - 1], y[pea_shooter.position-1], &pea_shooter_img);
 			}
 		}
 		if (key == 'a') //A键
 		{
 			if (pea_shooter.position % 9 != 1) { // 不是第一列
 				pea_shooter.position -= 1; // 左移一列
-				putimage(x[pea_shooter.position - 1], y[pea_shooter.position], &pea_shooter_img);
+				putimage(x[pea_shooter.position - 1], y[pea_shooter.position-1], &pea_shooter_img);
 			}
 		}
 		if (key == 's') //S键
 		{
 			if (pea_shooter.position <= 36) { // 不是第五行
 				pea_shooter.position += 9; // 下移一行
-				putimage(x[pea_shooter.position - 1], y[pea_shooter.position], &pea_shooter_img);
+				putimage(x[pea_shooter.position - 1], y[pea_shooter.position-1], &pea_shooter_img);
 			}
 		}
 		if (key == 'd') //D键
 		{
 			if (pea_shooter.position % 9 != 0) { // 不是第九列
 				pea_shooter.position += 1; // 右移一列
-				putimage(x[pea_shooter.position - 1], y[pea_shooter.position], &pea_shooter_img);
+				putimage(x[pea_shooter.position - 1], y[pea_shooter.position-1], &pea_shooter_img);
 			}
 		}
 	}
