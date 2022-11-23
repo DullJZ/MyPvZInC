@@ -1,4 +1,4 @@
-﻿#include "common.cpp"
+﻿#include "function.cpp"
 int play(void);
 int main()
 {
@@ -37,33 +37,36 @@ int play(void)
 	//暂时不考虑透明贴图问题和GIF动画问题
 	putimage(x[pea_shooter.position-1], y[pea_shooter.position-1], &pea_shooter_img);
 	//drawAlpha(&pea_shooter_img, pea_shooter.x, pea_shooter.y,);
-	ExMessage m;
 	while (1) {
 		char key = _getch();
-		if (key == 'w') //W键
+		if (key == 'w' || key == 'W') //W键
 		{
-			if (pea_shooter.position >= 9) { // 不是第一行
+			if (pea_shooter.position > 9) { // 不是第一行
+				clear(background);
 				pea_shooter.position -= 9; // 上移一行
 				putimage(x[pea_shooter.position - 1], y[pea_shooter.position-1], &pea_shooter_img);
 			}
 		}
-		if (key == 'a') //A键
+		if (key == 'a' || key == 'A') //A键
 		{
 			if (pea_shooter.position % 9 != 1) { // 不是第一列
+				clear(background);
 				pea_shooter.position -= 1; // 左移一列
 				putimage(x[pea_shooter.position - 1], y[pea_shooter.position-1], &pea_shooter_img);
 			}
 		}
-		if (key == 's') //S键
+		if (key == 's' || key == 'S') //S键
 		{
 			if (pea_shooter.position <= 36) { // 不是第五行
+				clear(background);
 				pea_shooter.position += 9; // 下移一行
 				putimage(x[pea_shooter.position - 1], y[pea_shooter.position-1], &pea_shooter_img);
 			}
 		}
-		if (key == 'd') //D键
+		if (key == 'd' || key == 'D') //D键
 		{
 			if (pea_shooter.position % 9 != 0) { // 不是第九列
+				clear(background);
 				pea_shooter.position += 1; // 右移一列
 				putimage(x[pea_shooter.position - 1], y[pea_shooter.position-1], &pea_shooter_img);
 			}
