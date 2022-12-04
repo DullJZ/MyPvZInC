@@ -1,5 +1,4 @@
 ﻿#include "function.cpp"
-int play(int);
 int main()
 {
 	initgraph(800, 600);	// 创建绘图窗口，大小为 640x480 像素
@@ -14,7 +13,7 @@ int main()
 		case WM_LBUTTONDOWN:
 			if (m.x > 330 && m.y > 439 && m.x < 514 && m.y < 496) {
 				start_time = time(NULL);
-				play(start_time);
+				play();
 			}
 		}
 	}
@@ -22,64 +21,53 @@ int main()
 	return 0;
 }
 
-int play(int start_time)
+int play()
 {
-	initgraph(1100, 800);
-	IMAGE background;
+	initgraph(1400, 600);
+	
 	loadimage(&background, L".\\img\\background.jpg");
 	putimage(0, 0, &background);
-	Plant pea_shooter;
+	
 	strcpy(pea_shooter.name, "pea_shooter");
 	loadimage(&pea_shooter.image,L".\\img\\Peashooter.gif");
-	Zombie zombies[100];
-	Timer timer;
-	timer.start_time = start_time;
+	loadimage(&common_zombie_img, L".\\img\\Zombie.gif");
 	// 初始位置
 	pea_shooter.position = 2 * 9 + 1; //第三行第一个
 	pea_shooter.blood = 100;
 	//暂时不考虑透明贴图问题和GIF动画问题
 	putimage(x[pea_shooter.position-1], y[pea_shooter.position-1], &pea_shooter.image);
-	//drawAlpha(&pea_shooter.image, pea_shooter.x, pea_shooter.y,);
+	//drawAlpha(&pea_shooter.image, x[pea_shooter.position], y[pea_shooter.position],63,70,63,70);
 	while (1) {
-		// 更新计时器
-		int s = time(NULL) - timer.start_time;
-		int seconds = s % 60 % 60;
-		int minites = (s - seconds) % 60;
-		int hours = (s - seconds - minites * 60) / 3600;
-		_stprintf(timer.str, _T("%d:%d:%d"), hours, minites, seconds);
-		outtextxy(timer.x, timer.y, timer.str);
+		_beginthread(timec_place_zombie, 0, NULL);  //启动按时间防止僵尸进程
+		_beginthread(timec_move_zombie, 0, NULL);
 		// 从键盘获取移动的信息
 		char key = _getch();
 		if (key == 'w' || key == 'W') //W键
 		{
 			if (pea_shooter.position > 9) { // 不是第一行
-				fresh(background,pea_shooter,zombies);
 				pea_shooter.position -= 9; // 上移一行
-				putimage(x[pea_shooter.position - 1], y[pea_shooter.position-1], &pea_shooter.image);
+				fresh(background,pea_shooter,zombies);
 			}
 		}
 		if (key == 'a' || key == 'A') //A键
 		{
 			if (pea_shooter.position % 9 != 1) { // 不是第一列
-				fresh(background, pea_shooter, zombies);
 				pea_shooter.position -= 1; // 左移一列
-				putimage(x[pea_shooter.position - 1], y[pea_shooter.position-1], &pea_shooter.image);
+				fresh(background, pea_shooter, zombies);
 			}
 		}
 		if (key == 's' || key == 'S') //S键
 		{
 			if (pea_shooter.position <= 36) { // 不是第五行
-				fresh(background, pea_shooter, zombies);
 				pea_shooter.position += 9; // 下移一行
-				putimage(x[pea_shooter.position - 1], y[pea_shooter.position-1], &pea_shooter.image);
+				fresh(background, pea_shooter, zombies);
 			}
 		}
 		if (key == 'd' || key == 'D') //D键
 		{
 			if (pea_shooter.position % 9 != 0) { // 不是第九列
-				fresh(background, pea_shooter, zombies);
 				pea_shooter.position += 1; // 右移一列
-				putimage(x[pea_shooter.position - 1], y[pea_shooter.position-1], &pea_shooter.image);
+				fresh(background, pea_shooter, zombies);
 			}
 		}
 
@@ -87,3 +75,31 @@ int play(int start_time)
 	return 0;
 }
 
+void timec_place_zombie(void*) {
+	int start_time = time(NULL);
+	while (1) {
+		int s = time(NULL) - start_time;
+		if (s!=0 && s%5==0) {
+			zombie_num++;
+			place_zombie(zombies, common_zombie_img, zombie_num);
+			
+			
+		}
+		Sleep(100);
+	}
+}
+
+void timec_move_zombie(void*) {
+	Sleep(6000);
+	timeb start_time;
+	ftime(&start_time); //获取毫秒
+	while (1) {
+		timeb now_time;
+		ftime(&now_time);
+		double s = (now_time.time * 1000.0 + now_time.millitm) / 100 - (start_time.time * 1000.0 + start_time.millitm) / 100;
+		for (int i = 1; i <= zombie_num; i++) {
+			move_zombie(zombies[i - 1]);
+		}
+		Sleep(1000);
+	}
+}
