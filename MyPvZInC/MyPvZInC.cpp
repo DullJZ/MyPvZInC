@@ -36,10 +36,13 @@ int play()
 	pea_shooter.blood = 100;
 	//暂时不考虑透明贴图问题和GIF动画问题
 	putimage(x[pea_shooter.position-1], y[pea_shooter.position-1], &pea_shooter.image);
-	//drawAlpha(&pea_shooter.image, x[pea_shooter.position], y[pea_shooter.position],63,70,63,70);
+	int timec_beginned = 0;
 	while (1) {
-		_beginthread(timec_place_zombie, 0, NULL);  //启动按时间防止僵尸进程
-		_beginthread(timec_move_zombie, 0, NULL);
+		if (!timec_beginned) {
+			_beginthread(timec_place_zombie, 0, NULL);
+			_beginthread(timec_move_zombie, 0, NULL);
+			timec_beginned = 1;
+		}
 		// 从键盘获取移动的信息
 		char key = _getch();
 		if (key == 'w' || key == 'W') //W键
@@ -85,7 +88,7 @@ void timec_place_zombie(void*) {
 			
 			
 		}
-		Sleep(100);
+		Sleep(1000);
 	}
 }
 

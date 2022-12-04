@@ -28,7 +28,7 @@ int place_zombie(Zombie zombies[],IMAGE zombie_img, int zombie_num) {
 	zombies[zombie_num - 1].blood = 100;
 	zombies[zombie_num - 1].x = 975;
 	loadimage(&zombie_img, L"./img/Zombie.gif",0,0);
-	putimage(975, y_line[zombies[zombie_num - 1].line], &zombie_img);
+	putimage(975, y_line[zombies[zombie_num - 1].line]-100, &zombie_img);
 	return 0;
 }
 
