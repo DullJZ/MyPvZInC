@@ -1,4 +1,5 @@
 #include "common.cpp"
+void PaintPeashooter();
 void fresh(IMAGE background,Plant pea_shooter,Zombie zombies[]) {
 	{
 		// «Â∆¡
@@ -6,7 +7,7 @@ void fresh(IMAGE background,Plant pea_shooter,Zombie zombies[]) {
 		// ªÊ÷∆±≥æ∞
 		putimage(0, 0, &background);
 		// ªÊ÷∆÷≤ŒÔ
-		putimage(x[pea_shooter.position-1], y[pea_shooter.position-1], &pea_shooter.image);
+		PaintPeashooter();
 		// ªÊ÷∆Ω© ¨
 		for (int i = 1; i <= zombie_num; i++) {
 			putimage(zombies[i-1].x, y_line[zombies[i-1].line], &common_zombie_img);
@@ -32,8 +33,25 @@ int place_zombie(Zombie zombies[],IMAGE zombie_img, int zombie_num) {
 	return 0;
 }
 
-int move_zombie(Zombie zombie) {
-	zombie.x -= 100;
+int move_zombie(Zombie *zombie) {
+	zombie->x -= 20;
 	fresh(background, pea_shooter, zombies);
 	return 0;
+}
+
+void LoadPeashooter(IMAGE Peashooter[2][13])
+{
+	for (int i = 0; i < 13; i++)
+	{
+		loadimage(&Peashooter[0][i], pea_shooter_images_address_black[i]);//≤Â»Î∫⁄µ◊≤ Õº
+		loadimage(&Peashooter[1][i], pea_shooter_images_address_white[i]);//≤Â»Î∞◊µ◊∫⁄Õº
+	}
+}
+
+void PaintPeashooter() {
+	for (int i = 0; i < 13; i++)
+	{
+		putimage(x[pea_shooter.position - 1], y[pea_shooter.position - 1], &pea_shooter.image[1][i],SRCAND);
+		putimage(x[pea_shooter.position - 1], y[pea_shooter.position - 1], &pea_shooter.image[0][i],SRCPAINT);
+	}
 }

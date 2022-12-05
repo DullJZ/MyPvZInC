@@ -29,13 +29,12 @@ int play()
 	putimage(0, 0, &background);
 	
 	strcpy(pea_shooter.name, "pea_shooter");
-	loadimage(&pea_shooter.image,L".\\img\\Peashooter.gif");
+	LoadPeashooter(pea_shooter.image);
 	loadimage(&common_zombie_img, L".\\img\\Zombie.gif");
 	// 初始位置
 	pea_shooter.position = 2 * 9 + 1; //第三行第一个
 	pea_shooter.blood = 100;
-	//暂时不考虑透明贴图问题和GIF动画问题
-	putimage(x[pea_shooter.position-1], y[pea_shooter.position-1], &pea_shooter.image);
+	PaintPeashooter();
 	int timec_beginned = 0;
 	while (1) {
 		if (!timec_beginned) {
@@ -101,7 +100,7 @@ void timec_move_zombie(void*) {
 		ftime(&now_time);
 		double s = (now_time.time * 1000.0 + now_time.millitm) / 100 - (start_time.time * 1000.0 + start_time.millitm) / 100;
 		for (int i = 1; i <= zombie_num; i++) {
-			move_zombie(zombies[i - 1]);
+			move_zombie(&zombies[i - 1]);
 		}
 		Sleep(1000);
 	}

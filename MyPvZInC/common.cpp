@@ -13,11 +13,13 @@
 static int x[45] = { 262,337,415,496,584,664,742,821,902,261,338,416,497,584,664,742,821,906,261,337,415,501,584,664,741,821,911,261,337,420,501,580,664,742,821,911,257,337,425,501,584,664,742,821,911 };
 static int y[45] = { 91 ,87 ,87, 87, 87, 87, 91, 91, 95, 188, 188, 188, 188, 188, 188, 188, 193, 193, 285, 285, 285, 292, 292, 292, 291, 292, 292 ,385, 385, 389, 389, 389, 389, 389, 389, 389, 479 ,479 ,479 ,483 ,483 ,483 ,483 ,483, 483 };
 static int y_line[5] = { 83,169,280,365,467 };
+static LPCTSTR pea_shooter_images_address_black[13] = { L"./img/black/Peashooterblack0.gif",L"./img/black/Peashooterblack1.gif",L"./img/black/Peashooterblack2.gif",L"./img/black/Peashooterblack3.gif",L"./img/black/Peashooterblack4.gif",L"./img/black/Peashooterblack5.gif",L"./img/black/Peashooterblack6.gif",L"./img/black/Peashooterblack7.gif",L"./img/black/Peashooterblack8.gif",L"./img/black/Peashooterblack9.gif",L"./img/black/Peashooterblack10.gif",L"./img/black/Peashooterblack11.gif",L"./img/black/Peashooterblack12.gif"};
+static LPCTSTR pea_shooter_images_address_white[13] = { L"./img/white/Peashooterwhite0.gif",L"./img/white/Peashooterwhite1.gif",L"./img/white/Peashooterwhite2.gif",L"./img/white/Peashooterwhite3.gif",L"./img/white/Peashooterwhite4.gif",L"./img/white/Peashooterwhite5.gif",L"./img/white/Peashooterwhite6.gif",L"./img/white/Peashooterwhite7.gif",L"./img/white/Peashooterwhite8.gif",L"./img/white/Peashooterwhite9.gif",L"./img/white/Peashooterwhite10.gif",L"./img/white/Peashooterwhite11.gif",L"./img/white/Peashooterwhite12.gif" };
 
 typedef struct Plant
 {
 	char name[100];
-	IMAGE image;
+	IMAGE image[2][13];
 	int position;
 	int blood;
 	int attack_force;
