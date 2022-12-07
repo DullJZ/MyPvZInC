@@ -48,28 +48,28 @@ int play()
 		{
 			if (pea_shooter.position > 9) { // 不是第一行
 				pea_shooter.position -= 9; // 上移一行
-				fresh(background,pea_shooter,zombies);
+				refresh();
 			}
 		}
 		if (key == 'a' || key == 'A') //A键
 		{
 			if (pea_shooter.position % 9 != 1) { // 不是第一列
 				pea_shooter.position -= 1; // 左移一列
-				fresh(background, pea_shooter, zombies);
+				refresh();
 			}
 		}
 		if (key == 's' || key == 'S') //S键
 		{
 			if (pea_shooter.position <= 36) { // 不是第五行
 				pea_shooter.position += 9; // 下移一行
-				fresh(background, pea_shooter, zombies);
+				refresh();
 			}
 		}
 		if (key == 'd' || key == 'D') //D键
 		{
 			if (pea_shooter.position % 9 != 0) { // 不是第九列
 				pea_shooter.position += 1; // 右移一列
-				fresh(background, pea_shooter, zombies);
+				refresh();
 			}
 		}
 
@@ -79,7 +79,7 @@ int play()
 
 void timec_place_zombie(void*) {
 	int start_time = time(NULL);
-	while (1) {
+	while (!gameover) {
 		int s = time(NULL) - start_time;
 		if (s!=0 && s%5==0) {
 			zombie_num++;
@@ -93,15 +93,10 @@ void timec_place_zombie(void*) {
 
 void timec_move_zombie(void*) {
 	Sleep(6000);
-	timeb start_time;
-	ftime(&start_time); //获取毫秒
-	while (1) {
-		timeb now_time;
-		ftime(&now_time);
-		double s = (now_time.time * 1000.0 + now_time.millitm) / 100 - (start_time.time * 1000.0 + start_time.millitm) / 100;
+	while (!gameover) {
 		for (int i = 1; i <= zombie_num; i++) {
 			move_zombie(&zombies[i - 1]);
 		}
-		Sleep(100);
+		Sleep(20);
 	}
 }

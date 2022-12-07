@@ -1,6 +1,6 @@
 #include "common.cpp"
 void PaintPeashooter();
-void fresh(IMAGE background,Plant pea_shooter,Zombie zombies[]) {
+void refresh() {
 	{
 		// «Â∆¡
 		cleardevice();
@@ -12,8 +12,12 @@ void fresh(IMAGE background,Plant pea_shooter,Zombie zombies[]) {
 		for (int i = 1; i <= zombie_num; i++) {
 			putimage(zombies[i - 1].x, y_line[zombies[i - 1].line] - 50, &zombie_img_white, SRCAND);
 			putimage(zombies[i - 1].x, y_line[zombies[i - 1].line] - 50, &zombie_img_black, SRCPAINT);
-
+			if_died(zombie_num);
+			if (gameover) {
+				cleardevice();
+			}
 		}
+		
 	}
 }
 
@@ -36,8 +40,11 @@ int place_zombie(Zombie zombies[], int zombie_num) {
 }
 
 int move_zombie(Zombie *zombie) {
-	zombie->x -= 5;
-	fresh(background, pea_shooter, zombies);
+	zombie->x -= 1;
+	BeginBatchDraw();
+	FlushBatchDraw();
+	refresh();
+	EndBatchDraw();
 	return 0;
 }
 
@@ -51,4 +58,15 @@ void PaintPeashooter()
 {
 	putimage(x[pea_shooter.position - 1], y[pea_shooter.position - 1], &pea_shooter.image[1][0],SRCAND);
 	putimage(x[pea_shooter.position - 1], y[pea_shooter.position - 1], &pea_shooter.image[0][0],SRCPAINT);
+}
+
+void if_died(int zombie_num) {
+	for (int i = 0; i < zombie_num; i++) {
+		if (zombies[i].x < 219) {
+			gameover = 1;
+		}
+		if (zombies[i].x == x[pea_shooter.position-1]) {
+			gameover = 1;
+		}
+	}
 }

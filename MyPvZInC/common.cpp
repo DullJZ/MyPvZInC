@@ -49,9 +49,11 @@ typedef struct
 int play();
 void timec_place_zombie(void*);
 void timec_move_zombie(void*);
+void if_died(int);
 Zombie zombies[100];
 Plant pea_shooter;
 IMAGE zombie_img_black;
 IMAGE zombie_img_white;
 IMAGE background;
 int zombie_num = 0;
+int gameover = 0;
