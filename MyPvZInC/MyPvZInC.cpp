@@ -24,13 +24,13 @@ int main()
 int play()
 {
 	initgraph(1400, 600);
-	
+	loadimage(&zombie_img_black, L"./img/Zombieblack0.gif", 0, 0);
+	loadimage(&zombie_img_white, L"./img/Zombiewhite0.gif");
 	loadimage(&background, L".\\img\\background.jpg");
 	putimage(0, 0, &background);
 	
 	strcpy(pea_shooter.name, "pea_shooter");
 	LoadPeashooter(pea_shooter.image);
-	loadimage(&common_zombie_img, L".\\img\\Zombie.gif");
 	// 初始位置
 	pea_shooter.position = 2 * 9 + 1; //第三行第一个
 	pea_shooter.blood = 100;
@@ -83,7 +83,7 @@ void timec_place_zombie(void*) {
 		int s = time(NULL) - start_time;
 		if (s!=0 && s%5==0) {
 			zombie_num++;
-			place_zombie(zombies, common_zombie_img, zombie_num);
+			place_zombie(zombies, zombie_num);
 			
 			
 		}
@@ -102,6 +102,6 @@ void timec_move_zombie(void*) {
 		for (int i = 1; i <= zombie_num; i++) {
 			move_zombie(&zombies[i - 1]);
 		}
-		Sleep(1000);
+		Sleep(100);
 	}
 }
