@@ -39,12 +39,20 @@ int move_zombie(Zombie *zombie) {
 	return 0;
 }
 
-void LoadPeashooter(IMAGE Peashooter[2][13])
+void LoadPeashooter(IMAGE Peashooter_img[2][13])
 {
 	for (int i = 0; i < 13; i++)
 	{
-		loadimage(&Peashooter[0][i], pea_shooter_images_address_black[i]);//²åÈëºÚµ×²ÊÍ¼
-		loadimage(&Peashooter[1][i], pea_shooter_images_address_white[i]);//²åÈë°×µ×ºÚÍ¼
+		loadimage(&Peashooter_img[0][i], pea_shooter_images_address_black[i]);//²åÈëºÚµ×²ÊÍ¼
+		loadimage(&Peashooter_img[1][i], pea_shooter_images_address_white[i]);//²åÈë°×µ×ºÚÍ¼
+	}
+}
+
+void LoadZombies(IMAGE Zombie_img[2][13]) {
+	for (int i = 0; i < 22; i++)
+	{
+		loadimage(&Zombie_img[0][i], zombie_images_address_black[i]);//²åÈëºÚµ×²ÊÍ¼
+		loadimage(&Zombie_img[1][i], zombie_images_address_white[i]);//²åÈë°×µ×ºÚÍ¼
 	}
 }
 
@@ -53,5 +61,13 @@ void PaintPeashooter() {
 	{
 		putimage(x[pea_shooter.position - 1], y[pea_shooter.position - 1], &pea_shooter.image[1][i],SRCAND);
 		putimage(x[pea_shooter.position - 1], y[pea_shooter.position - 1], &pea_shooter.image[0][i],SRCPAINT);
+	}
+}
+
+void PaintZombie(Zombie zombie) {
+	for (int i = 0; i < 22; i++)
+	{
+		putimage(zombie.x, y_line[zombie.line], &pea_shooter.image[1][i], SRCAND);
+		putimage(x[pea_shooter.position - 1], y[pea_shooter.position - 1], &pea_shooter.image[0][i], SRCPAINT);
 	}
 }
