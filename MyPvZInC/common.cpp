@@ -38,12 +38,13 @@ typedef struct Zombie
 
 } Zombie;
 
-typedef struct Bullet
+//豌豆子弹
+typedef struct
 {
-	int x, y;
-	int fly_speed;
+	int   jgtime;     //每隔多少时间射一次
+	POINT ptSite;     //子弹老的位置
+	POINT ptNew;	  //子弹新的位置
 } Bullet;
-
 
 int play();
 void timec_place_zombie(void*);
