@@ -33,6 +33,7 @@ int play()
 	LoadPeashooter(pea_shooter.image);
 	// 初始位置
 	pea_shooter.position = 2 * 9 + 1; //第三行第一个
+	pea_shooter.line = 2;
 	pea_shooter.blood = 100;
 	PaintPeashooter();
 	int timec_beginned = 0;
@@ -48,6 +49,7 @@ int play()
 		{
 			if (pea_shooter.position > 9) { // 不是第一行
 				pea_shooter.position -= 9; // 上移一行
+				pea_shooter.line -= 1;
 				refresh();
 			}
 		}
@@ -62,6 +64,7 @@ int play()
 		{
 			if (pea_shooter.position <= 36) { // 不是第五行
 				pea_shooter.position += 9; // 下移一行
+				pea_shooter.line += 1;
 				refresh();
 			}
 		}
@@ -77,7 +80,7 @@ int play()
 	return 0;
 }
 
-void timec_place_zombie(void*) {
+void timec_place_zombie(void* pArg) {
 	int start_time = time(NULL);
 	while (!gameover) {
 		int s = time(NULL) - start_time;
@@ -99,4 +102,14 @@ void timec_move_zombie(void*) {
 		}
 		Sleep(20);
 	}
+}
+
+void timec_cartoon(void*) {
+	
+	while (!gameover) {
+		for (int i = 1; i <= zombie_num; i++) {
+			move_zombie(&zombies[i - 1]);
+		}
+		Sleep(20);
+	} 
 }

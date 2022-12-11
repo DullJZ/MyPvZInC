@@ -21,6 +21,7 @@ typedef struct Plant
 	char name[100];
 	IMAGE image[2][13];
 	int position;
+	int line; //0~4
 	int blood;
 	int attack_force;
 	int attack_speed;

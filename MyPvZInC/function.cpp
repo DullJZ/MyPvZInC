@@ -29,7 +29,7 @@ int place_zombie(Zombie zombies[], int zombie_num) {
 	/* 初始化随机数发生器 */
 	time_t t;
 	srand((unsigned)time(&t));
-	zombies[zombie_num-1].line = rand() % 5; // 生成0~5之间的随机数
+	zombies[zombie_num-1].line = rand() % 5; // 生成0~4之间的随机数
 	// 放置僵尸
 	strcpy(zombies[zombie_num-1].name, "普通僵尸");
 	zombies[zombie_num - 1].blood = 100;
@@ -62,11 +62,14 @@ void PaintPeashooter()
 
 void if_died(int zombie_num) {
 	for (int i = 0; i < zombie_num; i++) {
-		if (zombies[i].x < 219) {
+		if (zombies[i].x < 50) {
 			gameover = 1;
 		}
-		if (zombies[i].x == x[pea_shooter.position-1]) {
-			gameover = 1;
+		if (zombies[i].x == x[pea_shooter.position - 1] && zombies[i].line == pea_shooter.line)
+		{
+			{
+				gameover = 1;
+			}
 		}
 	}
 }
