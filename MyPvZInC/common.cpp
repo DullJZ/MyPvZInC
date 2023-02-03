@@ -19,6 +19,7 @@ static LPCTSTR pea_shooter_images_address_white[13] = { L"./img/white/Peashooter
 typedef struct Plant
 {
 	char name[100];
+	int now_img_index = 0;
 	IMAGE image[2][13];
 	int position;
 	int line; //0~4
@@ -40,7 +41,7 @@ typedef struct Zombie
 } Zombie;
 
 //豌豆子弹
-typedef struct
+typedef struct Bullet
 {
 	int   jgtime;     //每隔多少时间射一次
 	POINT ptSite;     //子弹老的位置
@@ -50,7 +51,11 @@ typedef struct
 int play();
 void timec_place_zombie(void*);
 void timec_move_zombie(void*);
+void timec_cartoon(void*);
+void timec_refresh(void*);
 void if_died(int);
+void LoadPeashooter();
+void PaintPeashooter();
 Zombie zombies[100];
 Plant pea_shooter;
 IMAGE zombie_img_black;

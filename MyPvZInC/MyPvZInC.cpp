@@ -30,7 +30,7 @@ int play()
 	putimage(0, 0, &background);
 	
 	strcpy(pea_shooter.name, "pea_shooter");
-	LoadPeashooter(pea_shooter.image);
+	LoadPeashooter();
 	// 初始位置
 	pea_shooter.position = 2 * 9 + 1; //第三行第一个
 	pea_shooter.line = 2;
@@ -41,6 +41,8 @@ int play()
 		if (!timec_beginned) {
 			_beginthread(timec_place_zombie, 0, NULL);
 			_beginthread(timec_move_zombie, 0, NULL);
+			_beginthread(timec_cartoon, 0, NULL);
+			_beginthread(timec_refresh, 0, NULL);
 			timec_beginned = 1;
 		}
 		// 从键盘获取移动的信息
@@ -105,11 +107,22 @@ void timec_move_zombie(void*) {
 }
 
 void timec_cartoon(void*) {
-	
 	while (!gameover) {
-		for (int i = 1; i <= zombie_num; i++) {
-			move_zombie(&zombies[i - 1]);
+		while (1){
+			for (int i = 0; i < 13; i++) {
+				Sleep(100);
+				//0-12内循环
+				pea_shooter.now_img_index = (pea_shooter.now_img_index + 1) % 13;
+			}
 		}
-		Sleep(20);
 	} 
+}
+
+void timec_refresh(void *) {
+	if (!gameover) {
+		while (1){
+			refresh();
+			Sleep(50);
+		}
+	}
 }

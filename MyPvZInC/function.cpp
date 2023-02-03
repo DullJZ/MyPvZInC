@@ -1,12 +1,13 @@
 #include "common.cpp"
-void PaintPeashooter();
 void refresh() {
 	{
+		BeginBatchDraw();
+		FlushBatchDraw();
 		// 清屏
 		cleardevice();
 		// 绘制背景
 		putimage(0, 0, &background);
-		// 绘制植物
+		// 可能不需要绘制植物
 		PaintPeashooter();
 		// 绘制僵尸
 		for (int i = 1; i <= zombie_num; i++) {
@@ -17,7 +18,7 @@ void refresh() {
 				cleardevice();
 			}
 		}
-		
+		EndBatchDraw();
 	}
 }
 
@@ -48,16 +49,18 @@ int move_zombie(Zombie *zombie) {
 	return 0;
 }
 
-void LoadPeashooter(IMAGE Peashooter[2][13])
-{
-	loadimage(&Peashooter[0][0], pea_shooter_images_address_black[0]);//插入黑底彩图
-	loadimage(&Peashooter[1][0], pea_shooter_images_address_white[0]);//插入白底黑图
+void LoadPeashooter(){
+	for (int i = 0; i < 13; i++) {
+		loadimage(&pea_shooter.image[0][i], pea_shooter_images_address_black[i]);//插入黑底彩图
+		loadimage(&pea_shooter.image[1][i], pea_shooter_images_address_white[i]);//插入白底黑图
+	}
 }
 
 void PaintPeashooter() 
 {
-	putimage(x[pea_shooter.position - 1], y[pea_shooter.position - 1], &pea_shooter.image[1][0],SRCAND);
-	putimage(x[pea_shooter.position - 1], y[pea_shooter.position - 1], &pea_shooter.image[0][0],SRCPAINT);
+	int i = pea_shooter.now_img_index;
+	putimage(x[pea_shooter.position - 1], y[pea_shooter.position - 1], &pea_shooter.image[1][i],SRCAND);
+	putimage(x[pea_shooter.position - 1], y[pea_shooter.position - 1], &pea_shooter.image[0][i],SRCPAINT);
 }
 
 void if_died(int zombie_num) {
@@ -65,7 +68,7 @@ void if_died(int zombie_num) {
 		if (zombies[i].x < 50) {
 			gameover = 1;
 		}
-		if (zombies[i].x == x[pea_shooter.position - 1] && zombies[i].line == pea_shooter.line)
+		if (zombies[i].x <= x[pea_shooter.position - 1] - 10 && zombies[i].x >= x[pea_shooter.position - 1] - 120 && zombies[i].line == pea_shooter.line)
 		{
 			{
 				gameover = 1;
