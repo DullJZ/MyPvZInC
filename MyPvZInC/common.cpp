@@ -40,26 +40,32 @@ typedef struct Zombie
 
 } Zombie;
 
-//豌豆子弹
+
 typedef struct Bullet
 {
-	int   jgtime;     //每隔多少时间射一次
-	POINT ptSite;     //子弹老的位置
-	POINT ptNew;	  //子弹新的位置
+	int x;
+	int line;
+	int flag = 0; //为0代表未击中，可视
 } Bullet;
 
 int play();
 void timec_place_zombie(void*);
 void timec_move_zombie(void*);
 void timec_cartoon(void*);
+void timec_place_bullet(void*);
+void timec_move_bullet(void*);
 void timec_refresh(void*);
 void if_died(int);
 void LoadPeashooter();
 void PaintPeashooter();
 Zombie zombies[100];
+Bullet bullets[1000];
 Plant pea_shooter;
 IMAGE zombie_img_black;
 IMAGE zombie_img_white;
+IMAGE bullet_img_black;
+IMAGE bullet_img_white;
 IMAGE background;
 int zombie_num = 0;
+int bullet_num = 0;
 int gameover = 0;

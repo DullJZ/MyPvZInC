@@ -3,7 +3,7 @@ int main()
 {
 	initgraph(800, 600);	// 创建绘图窗口，大小为 640x480 像素
 	IMAGE start;
-	loadimage(&start, L".\\img\\titlescreen.jpg");
+	loadimage(&start, L"./img/titlescreen.jpg");
 	putimage(0, 0, &start);
 	ExMessage m;
 	int start_time = 0;
@@ -26,7 +26,9 @@ int play()
 	initgraph(1400, 600);
 	loadimage(&zombie_img_black, L"./img/Zombieblack0.gif", 0, 0);
 	loadimage(&zombie_img_white, L"./img/Zombiewhite0.gif");
-	loadimage(&background, L".\\img\\background.jpg");
+	loadimage(&background, L"./img/background.jpg");
+	loadimage(&bullet_img_white, L"./img/bulletwhite.gif", 0, 0);
+	loadimage(&bullet_img_black, L"./img/bulletblack.gif", 0, 0);
 	putimage(0, 0, &background);
 	
 	strcpy(pea_shooter.name, "pea_shooter");
@@ -43,6 +45,8 @@ int play()
 			_beginthread(timec_move_zombie, 0, NULL);
 			_beginthread(timec_cartoon, 0, NULL);
 			_beginthread(timec_refresh, 0, NULL);
+			_beginthread(timec_place_bullet, 0, NULL);
+			_beginthread(timec_move_bullet, 0, NULL);
 			timec_beginned = 1;
 		}
 		// 从键盘获取移动的信息
@@ -116,6 +120,35 @@ void timec_cartoon(void*) {
 			}
 		}
 	} 
+}
+
+void timec_place_bullet(void*) {
+	if (!gameover) {
+		int have_shot = 0;
+		while (1) {
+			if (pea_shooter.now_img_index == 3 && have_shot == 0) {
+				bullet_num++;
+				int line = pea_shooter.line;
+				bullets[bullet_num - 1].line = line;
+				place_bullet(bullets, bullet_num);
+				have_shot = 1;
+			}
+			else {
+				have_shot = 0;
+			}
+			Sleep(50);
+		}
+
+	}
+}
+
+void timec_move_bullet(void*) {
+	while (!gameover) {
+		for (int i = 1; i <= bullet_num; i++) {
+			move_bullet(&bullets[i - 1]);
+		}
+		Sleep(20);
+	}
 }
 
 void timec_refresh(void *) {

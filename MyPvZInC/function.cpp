@@ -7,13 +7,21 @@ void refresh() {
 		cleardevice();
 		// 绘制背景
 		putimage(0, 0, &background);
-		// 可能不需要绘制植物
+		// 可能不需要绘制植物，能跑就别动
 		PaintPeashooter();
 		// 绘制僵尸
 		for (int i = 1; i <= zombie_num; i++) {
 			putimage(zombies[i - 1].x, y_line[zombies[i - 1].line] - 50, &zombie_img_white, SRCAND);
 			putimage(zombies[i - 1].x, y_line[zombies[i - 1].line] - 50, &zombie_img_black, SRCPAINT);
 			if_died(zombie_num);
+			if (gameover) {
+				cleardevice();
+			}
+		}
+		// 绘制子弹
+		for (int i = 1; i <= bullet_num; i++) {
+			putimage(bullets[i - 1].x, y_line[bullets[i - 1].line] + 10, &bullet_img_white, SRCAND);
+			putimage(bullets[i - 1].x, y_line[bullets[i - 1].line] + 10, &bullet_img_black, SRCPAINT);
 			if (gameover) {
 				cleardevice();
 			}
@@ -75,4 +83,17 @@ void if_died(int zombie_num) {
 			}
 		}
 	}
+}
+
+int place_bullet(Bullet bullets[], int bullet_num) {
+
+	bullets[bullet_num - 1].x = x[pea_shooter.position - 1] + 60;
+	putimage(bullets[bullet_num -1].x, y_line[bullets[bullet_num - 1].line] + 10, &bullet_img_white, SRCAND);
+	putimage(bullets[bullet_num - 1].x, y_line[bullets[bullet_num - 1].line] + 10, &bullet_img_black, SRCPAINT);
+	return 0;
+}
+
+int move_bullet(Bullet* bullet) {
+	bullet->x += 2;
+	return 0;
 }
