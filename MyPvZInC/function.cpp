@@ -125,3 +125,26 @@ int get_perfect_shoot_arg(int line) {
 		break;
 	}
 }
+
+// »æÖÆ°®ÐÄº¯Êý
+void heart(int x, int y, double scale) {
+	setfillcolor(RED);
+	solidrectangle((x - 35) * scale, y * scale, (x + 35) * scale, (y + 90) * scale);
+	solidcircle((x - 45) * scale, y * scale, 55 * scale);
+	solidcircle((x + 45) * scale, y * scale, 55 * scale);
+	setlinecolor(COLORREF(BLACK));
+	for (int i = 0; i <= 35; i++) {
+		POINT pts1[] = { {(x - 70 - i * 1) * scale,(y - 50) * scale},
+						 {(x - 140 - i * 1) * scale,y * scale},
+						 {(x - 15 - i * 1) * scale,(y + 50) * scale},
+						 {(x - i * 1) * scale,(y + 90) * scale}
+		};
+		POINT pts2[] = { {(x + 70 + i * 1) * scale,(y - 50) * scale},
+						 {(x + 135 + i * 1) * scale,y * scale},
+						 {(x + 17 + i * 1) * scale,(y + 50) * scale},
+						 {(x + i * 1) * scale,(y + 90) * scale}
+		};
+		polybezier(pts1, 4);
+		polybezier(pts2, 4);
+	}
+}
