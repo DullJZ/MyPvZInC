@@ -23,6 +23,7 @@ int main()
 
 int play()
 {
+	LoadKeyboardLayout(L"0x0409", KLF_ACTIVATE); // 设置英文键盘
 	initgraph(1400, 600);
 	loadimage(&zombie_img_black, L"./img/Zombieblack0.gif", 0, 0);
 	loadimage(&zombie_img_white, L"./img/Zombiewhite0.gif");
@@ -49,6 +50,7 @@ int play()
 			_beginthread(timec_move_bullet, 0, NULL);
 			_beginthread(timec_check, 0, NULL);
 			_beginthread(timec_rubbish_collect, 0, NULL);
+			_beginthread(timec_bgm, 0, NULL);
 			timec_beginned = 1;
 		}
 		// 从键盘获取移动的信息
@@ -206,5 +208,27 @@ void timec_rubbish_collect(void*) {
 			}
 		}
 		Sleep(20);
+	}
+}
+
+void timec_bgm(void*) {
+	while (1) {
+		if (!gameover) {
+			mciSendString(TEXT("open ./img/background_music.mp3 alias bgm"), NULL, 0, NULL);
+
+			mciSendString(TEXT("play bgm"), NULL, 0, NULL);
+			int s = 0;
+			while (1) {
+				if (s >= 300000) {  // 300秒后重新播放
+					break;
+				}
+				Sleep(50); // 每50毫秒检查是否游戏结束
+				s += 50;
+				if (gameover) {
+					mciSendString(TEXT("close bgm"), NULL, 0, NULL);
+					_endthread();
+				}
+			}
+		}
 	}
 }

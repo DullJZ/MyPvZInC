@@ -8,6 +8,8 @@
 #include <time.h>
 #include <sys/timeb.h>
 #include <process.h>
+#pragma comment(lib,"winmm.lib")
+#include <mmsystem.h>
 #define WindowWidth 1100
 #define WindowHeight 800
 static int x[45] = { 262,337,415,496,584,664,742,821,902,261,338,416,497,584,664,742,821,906,261,337,415,501,584,664,741,821,911,261,337,420,501,580,664,742,821,911,257,337,425,501,584,664,742,821,911 };
@@ -58,6 +60,7 @@ void timec_move_bullet(void*);
 void timec_refresh(void*);
 void timec_check(void*);
 void timec_rubbish_collect(void*);
+void timec_bgm(void*);
 void if_died(int);
 void LoadPeashooter();
 void PaintPeashooter();
