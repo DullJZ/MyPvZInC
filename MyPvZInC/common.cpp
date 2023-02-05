@@ -35,6 +35,7 @@ typedef struct Zombie
 	int x;
 	int line;
 	int blood;
+	int alive = 1; //为1代表存活
 	int attack_force;
 	int attack_speed;
 
@@ -55,9 +56,11 @@ void timec_cartoon(void*);
 void timec_place_bullet(void*);
 void timec_move_bullet(void*);
 void timec_refresh(void*);
+void timec_check(void*);
 void if_died(int);
 void LoadPeashooter();
 void PaintPeashooter();
+int get_perfect_shoot_arg(int);
 Zombie zombies[100];
 Bullet bullets[1000];
 Plant pea_shooter;

@@ -47,6 +47,7 @@ int play()
 			_beginthread(timec_refresh, 0, NULL);
 			_beginthread(timec_place_bullet, 0, NULL);
 			_beginthread(timec_move_bullet, 0, NULL);
+			_beginthread(timec_check, 0, NULL);
 			timec_beginned = 1;
 		}
 		// 从键盘获取移动的信息
@@ -156,6 +157,29 @@ void timec_refresh(void *) {
 		while (1){
 			refresh();
 			Sleep(50);
+		}
+	}
+}
+
+void timec_check(void*) {
+	if (!gameover) {
+		while (1) {
+			// 检查子弹碰撞情况
+			for (int i = 1; i <= bullet_num; i++) {
+				for (int j = 1; j < zombie_num; j++) {
+					if (bullets[i - 1].flag == 0 && zombies[j - 1].alive) {
+						if (bullets[i - 1].line == zombies[j - 1].line && bullets[i - 1].x - 15 >= zombies[j - 1].x && bullets[i - 1].x - 20 <= zombies[j - 1].x) {
+							bullets[i - 1].flag = 1;
+							zombies[j - 1].blood -= 20;
+							// 检查僵尸是否存活
+							if (zombies[j - 1].blood <= 0) {
+								zombies[j - 1].alive = 0;
+							}
+						}
+					}
+				}
+			}
+			Sleep(20);
 		}
 	}
 }

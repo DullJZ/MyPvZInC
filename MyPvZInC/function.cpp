@@ -11,17 +11,21 @@ void refresh() {
 		PaintPeashooter();
 		// 绘制僵尸
 		for (int i = 1; i <= zombie_num; i++) {
-			putimage(zombies[i - 1].x, y_line[zombies[i - 1].line] - 50, &zombie_img_white, SRCAND);
-			putimage(zombies[i - 1].x, y_line[zombies[i - 1].line] - 50, &zombie_img_black, SRCPAINT);
-			if_died(zombie_num);
+			if (zombies[i-1].alive) {
+				putimage(zombies[i - 1].x, y_line[zombies[i - 1].line] - 50, &zombie_img_white, SRCAND);
+				putimage(zombies[i - 1].x, y_line[zombies[i - 1].line] - 50, &zombie_img_black, SRCPAINT);
+				if_died(zombie_num);
+			}
 			if (gameover) {
 				cleardevice();
 			}
 		}
 		// 绘制子弹
 		for (int i = 1; i <= bullet_num; i++) {
-			putimage(bullets[i - 1].x, y_line[bullets[i - 1].line] + 10, &bullet_img_white, SRCAND);
-			putimage(bullets[i - 1].x, y_line[bullets[i - 1].line] + 10, &bullet_img_black, SRCPAINT);
+			if (bullets[i - 1].flag == 0) {
+				putimage(bullets[i - 1].x, y_line[bullets[i - 1].line] + get_perfect_shoot_arg(bullets[i - 1].line), &bullet_img_white, SRCAND);
+				putimage(bullets[i - 1].x, y_line[bullets[i - 1].line] + get_perfect_shoot_arg(bullets[i - 1].line), &bullet_img_black, SRCPAINT);
+			}
 			if (gameover) {
 				cleardevice();
 			}
@@ -73,13 +77,16 @@ void PaintPeashooter()
 
 void if_died(int zombie_num) {
 	for (int i = 0; i < zombie_num; i++) {
-		if (zombies[i].x < 50) {
-			gameover = 1;
-		}
-		if (zombies[i].x <= x[pea_shooter.position - 1] - 10 && zombies[i].x >= x[pea_shooter.position - 1] - 120 && zombies[i].line == pea_shooter.line)
+		if (zombies[i].alive == 1) // 存活才判定
 		{
-			{
+			if (zombies[i].x < 50) {
 				gameover = 1;
+			}
+			if (zombies[i].x <= x[pea_shooter.position - 1] - 10 && zombies[i].x >= x[pea_shooter.position - 1] - 120 && zombies[i].line == pea_shooter.line)
+			{
+				{
+					gameover = 1;
+				}
 			}
 		}
 	}
@@ -88,12 +95,33 @@ void if_died(int zombie_num) {
 int place_bullet(Bullet bullets[], int bullet_num) {
 
 	bullets[bullet_num - 1].x = x[pea_shooter.position - 1] + 60;
-	putimage(bullets[bullet_num -1].x, y_line[bullets[bullet_num - 1].line] + 10, &bullet_img_white, SRCAND);
-	putimage(bullets[bullet_num - 1].x, y_line[bullets[bullet_num - 1].line] + 10, &bullet_img_black, SRCPAINT);
+	bullets[bullet_num - 1].line = pea_shooter.line;
+	putimage(bullets[bullet_num -1].x, y_line[bullets[bullet_num - 1].line] + get_perfect_shoot_arg(bullets[bullet_num - 1].line), &bullet_img_white, SRCAND);
+	putimage(bullets[bullet_num - 1].x, y_line[bullets[bullet_num - 1].line] + get_perfect_shoot_arg(bullets[bullet_num - 1].line), &bullet_img_black, SRCPAINT);
 	return 0;
 }
 
 int move_bullet(Bullet* bullet) {
 	bullet->x += 2;
 	return 0;
+}
+
+int get_perfect_shoot_arg(int line) {
+	switch (line) {
+	case 1:
+		return 20;
+		break;
+	case 2:
+		return 10;
+		break;
+	case 3:
+		return 20;
+		break;
+	case 4:
+		return 15;
+		break;
+	case 0:
+		return 10;
+		break;
+	}
 }
