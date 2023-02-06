@@ -30,6 +30,8 @@ int play()
 	loadimage(&background, L"./img/background.jpg");
 	loadimage(&bullet_img_white, L"./img/bulletwhite.gif", 0, 0);
 	loadimage(&bullet_img_black, L"./img/bulletblack.gif", 0, 0);
+	loadimage(&superbullet_img_white, L"./img/superbulletwhite.jpg", 0, 0);
+	loadimage(&superbullet_img_black, L"./img/superbulletblack.jpg", 0, 0);
 	putimage(0, 0, &background);
 	
 	strcpy(pea_shooter.name, "pea_shooter");
@@ -85,7 +87,11 @@ int play()
 				refresh();
 			}
 		}
-
+		// 元素战技
+		if (key == 'e' || key == 'E') {
+			bullet_num++;
+			place_superbullet(bullets, bullet_num);
+		}
 	}
 	return 0;
 }
@@ -108,7 +114,7 @@ void timec_move_zombie(void*) {
 	Sleep(6000);
 	while (!gameover) {
 		for (int i = 1; i <= zombie_num; i++) {
-			move_zombie(&zombies[i - 1]);
+			zombies[i - 1].x--;
 		}
 		Sleep(20);
 	}
@@ -149,7 +155,7 @@ void timec_place_bullet(void*) {
 void timec_move_bullet(void*) {
 	while (!gameover) {
 		for (int i = 1; i <= bullet_num; i++) {
-			move_bullet(&bullets[i - 1]);
+			bullets[i - 1].x += 2;
 		}
 		Sleep(20);
 	}
@@ -159,7 +165,7 @@ void timec_refresh(void *) {
 	if (!gameover) {
 		while (1){
 			refresh();
-			Sleep(50);
+			Sleep(20);
 		}
 	}
 }
@@ -169,11 +175,11 @@ void timec_check(void*) {
 		while (1) {
 			// 检查子弹碰撞情况
 			for (int i = 1; i <= bullet_num; i++) {
-				for (int j = 1; j < zombie_num; j++) {
+				for (int j = 1; j <= zombie_num; j++) {
 					if (bullets[i - 1].flag == 0 && zombies[j - 1].alive) {
 						if (bullets[i - 1].line == zombies[j - 1].line && bullets[i - 1].x - 15 >= zombies[j - 1].x && bullets[i - 1].x - 20 <= zombies[j - 1].x) {
 							bullets[i - 1].flag = 1;
-							zombies[j - 1].blood -= 20;
+							zombies[j - 1].blood -= bullets[i - 1].hurt;
 							// 检查僵尸是否存活
 							if (zombies[j - 1].blood <= 0) {
 								zombies[j - 1].alive = 0;
@@ -188,7 +194,7 @@ void timec_check(void*) {
 }
 
 void timec_rubbish_collect(void*) {
-	while (1) {
+	while (0) {
 		for (int i = 1; i <= zombie_num; i++) {
 			if (zombies[i - 1].alive == 0) {
 				// 删除已死亡的僵尸
@@ -208,6 +214,9 @@ void timec_rubbish_collect(void*) {
 			}
 		}
 		Sleep(20);
+		if (gameover) {
+			_endthread();
+		}
 	}
 }
 

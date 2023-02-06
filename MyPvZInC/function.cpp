@@ -23,8 +23,14 @@ void refresh() {
 		// »æÖÆ×Óµ¯
 		for (int i = 1; i <= bullet_num; i++) {
 			if (bullets[i - 1].flag == 0) {
-				putimage(bullets[i - 1].x, y_line[bullets[i - 1].line] + get_perfect_shoot_arg(bullets[i - 1].line), &bullet_img_white, SRCAND);
-				putimage(bullets[i - 1].x, y_line[bullets[i - 1].line] + get_perfect_shoot_arg(bullets[i - 1].line), &bullet_img_black, SRCPAINT);
+				if (bullets[i - 1].type == 1) {
+					putimage(bullets[i - 1].x, y_line[bullets[i - 1].line] + get_perfect_shoot_arg(bullets[i - 1].line), &bullet_img_white, SRCAND);
+					putimage(bullets[i - 1].x, y_line[bullets[i - 1].line] + get_perfect_shoot_arg(bullets[i - 1].line), &bullet_img_black, SRCPAINT);
+				}
+				else {
+					putimage(bullets[i - 1].x, y_line[bullets[i - 1].line] + get_perfect_shoot_arg(bullets[i - 1].line), &superbullet_img_white, SRCAND);
+					putimage(bullets[i - 1].x, y_line[bullets[i - 1].line] + get_perfect_shoot_arg(bullets[i - 1].line), &superbullet_img_black, SRCPAINT);
+				}
 			}
 			if (gameover) {
 				cleardevice();
@@ -52,14 +58,6 @@ int place_zombie(Zombie zombies[], int zombie_num) {
 	return 0;
 }
 
-int move_zombie(Zombie *zombie) {
-	zombie->x -= 1;
-	BeginBatchDraw();
-	FlushBatchDraw();
-	refresh();
-	EndBatchDraw();
-	return 0;
-}
 
 void LoadPeashooter(){
 	for (int i = 0; i < 13; i++) {
@@ -101,10 +99,16 @@ int place_bullet(Bullet bullets[], int bullet_num) {
 	return 0;
 }
 
-int move_bullet(Bullet* bullet) {
-	bullet->x += 2;
+int place_superbullet(Bullet bullets[], int bullet_num) {
+	bullets[bullet_num - 1].x = x[pea_shooter.position - 1] + 60;
+	bullets[bullet_num - 1].line = pea_shooter.line;
+	bullets[bullet_num - 1].hurt = 100;
+	bullets[bullet_num - 1].type = 2;
+	putimage(bullets[bullet_num - 1].x, y_line[bullets[bullet_num - 1].line] + get_perfect_shoot_arg(bullets[bullet_num - 1].line), &superbullet_img_white, SRCAND);
+	putimage(bullets[bullet_num - 1].x, y_line[bullets[bullet_num - 1].line] + get_perfect_shoot_arg(bullets[bullet_num - 1].line), &superbullet_img_black, SRCPAINT);
 	return 0;
 }
+
 
 int get_perfect_shoot_arg(int line) {
 	switch (line) {

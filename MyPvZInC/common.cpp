@@ -46,9 +46,11 @@ typedef struct Zombie
 
 typedef struct Bullet
 {
+	int type = 1; //为0代表普通子弹，为1代表超级子弹
 	int x;
 	int line;
 	int flag = 0; //为0代表未击中，可视
+	int hurt = 20;
 } Bullet;
 
 int play();
@@ -73,6 +75,8 @@ IMAGE zombie_img_black;
 IMAGE zombie_img_white;
 IMAGE bullet_img_black;
 IMAGE bullet_img_white;
+IMAGE superbullet_img_black;
+IMAGE superbullet_img_white;
 IMAGE background;
 int zombie_num = 0;
 int bullet_num = 0;
