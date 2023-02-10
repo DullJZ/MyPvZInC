@@ -6,6 +6,7 @@ int main()
 	loadimage(&start, L"./img/titlescreen.jpg");
 	putimage(0, 0, &start);
 	ExMessage m;
+	sort();
 	int start_time = 0;
 	while (1) {
 		m = getmessage(EX_MOUSE);
@@ -30,6 +31,11 @@ int play()
 	loadimage(&background, L"./img/background.jpg");
 	loadimage(&bullet_img_white, L"./img/bulletwhite.gif", 0, 0);
 	loadimage(&bullet_img_black, L"./img/bulletblack.gif", 0, 0);
+	loadimage(&fire_img_white, L"./img/firewhite.jpg", 0, 0);
+	loadimage(&fire_img_black, L"./img/fireblack.jpg", 0, 0);
+	loadimage(&grayfire_img_white, L"./img/grayfirewhite.png", 0, 0);
+	loadimage(&grayfire_img_black, L"./img/grayfireblack.png", 0, 0);
+	loadimage(&gameover_img, L"./img/ZombiesWon.bmp", 0, 0);
 	loadimage(&superbullet_img_white, L"./img/superbulletwhite.jpg", 0, 0);
 	loadimage(&superbullet_img_black, L"./img/superbulletblack.jpg", 0, 0);
 	putimage(0, 0, &background);
@@ -53,7 +59,9 @@ int play()
 			_beginthread(timec_check, 0, NULL);
 			_beginthread(timec_rubbish_collect, 0, NULL);
 			_beginthread(timec_bgm, 0, NULL);
+			_beginthread(timec_superbullet, 0, NULL);
 			timec_beginned = 1;
+			start_time = time(NULL);
 		}
 		// 从键盘获取移动的信息
 		char key = _getch();
@@ -88,9 +96,10 @@ int play()
 			}
 		}
 		// 元素战技
-		if (key == 'e' || key == 'E') {
+		if ((key == 'e' || key == 'E') && fire_available) {
 			bullet_num++;
 			place_superbullet(bullets, bullet_num);
+			fire_available = 0;
 		}
 	}
 	return 0;
@@ -108,6 +117,7 @@ void timec_place_zombie(void* pArg) {
 		}
 		Sleep(1000);
 	}
+	_endthread();
 }
 
 void timec_move_zombie(void*) {
@@ -118,6 +128,7 @@ void timec_move_zombie(void*) {
 		}
 		Sleep(20);
 	}
+	_endthread();
 }
 
 void timec_cartoon(void*) {
@@ -129,7 +140,8 @@ void timec_cartoon(void*) {
 				pea_shooter.now_img_index = (pea_shooter.now_img_index + 1) % 13;
 			}
 		}
-	} 
+	}
+	_endthread();
 }
 
 void timec_place_bullet(void*) {
@@ -150,6 +162,7 @@ void timec_place_bullet(void*) {
 		}
 
 	}
+	_endthread();
 }
 
 void timec_move_bullet(void*) {
@@ -159,20 +172,23 @@ void timec_move_bullet(void*) {
 		}
 		Sleep(20);
 	}
+	_endthread();
 }
 
 void timec_refresh(void *) {
-	if (!gameover) {
-		while (1){
+	while (1){
+		if (!gameover) {
 			refresh();
 			Sleep(20);
 		}
+		else { _endthread(); }
 	}
+	
 }
 
 void timec_check(void*) {
-	if (!gameover) {
-		while (1) {
+	while (1) {
+		if (!gameover) {
 			// 检查子弹碰撞情况
 			for (int i = 1; i <= bullet_num; i++) {
 				for (int j = 1; j <= zombie_num; j++) {
@@ -183,6 +199,7 @@ void timec_check(void*) {
 							// 检查僵尸是否存活
 							if (zombies[j - 1].blood <= 0) {
 								zombies[j - 1].alive = 0;
+								dead_zombie_num++;
 							}
 						}
 					}
@@ -190,11 +207,36 @@ void timec_check(void*) {
 			}
 			Sleep(20);
 		}
+		if (gameover){
+			cleardevice();
+			initgraph(564, 468);
+			putimage(0, 0, &gameover_img);
+			// 计算分数
+			int score = (time(NULL) - start_time) * 10 + dead_zombie_num * 100;
+			char t[100],t1[20];
+			sprintf_s(t1, "%d\n", score);
+			// 保存分数
+			FILE *fp = NULL;
+			fp = fopen("./list.txt", "a+");
+			fprintf(fp, t1);
+			fclose(fp);
+			int max = sort();
+			// 弹窗
+			sprintf_s(t, "你获得了%d分，\n历史最高分为%d分", score, max);
+			if (MessageBoxA(NULL, t, "游戏结束", MB_ICONINFORMATION | MB_RETRYCANCEL) == IDRETRY) {
+				WinExec("./MyPvZInC.exe", SW_HIDE);
+				exit(0);
+			}
+			else {
+				exit(0);
+			}
+			_endthread();
+		}
 	}
 }
 
 void timec_rubbish_collect(void*) {
-	while (0) {
+	while (1) {
 		for (int i = 1; i <= zombie_num; i++) {
 			if (zombies[i - 1].alive == 0) {
 				// 删除已死亡的僵尸
@@ -240,4 +282,15 @@ void timec_bgm(void*) {
 			}
 		}
 	}
+}
+
+void timec_superbullet(void*) {
+	while (!gameover) {
+		if (!fire_available) {
+			Sleep(15000);
+			fire_available = 1;
+		}
+		Sleep(20);
+	}
+	_endthread();
 }

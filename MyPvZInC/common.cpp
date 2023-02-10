@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <graphics.h>		// 引用图形库头文件
 #include <conio.h>
+#include <math.h>
 #include <Windows.h>
 #include <string.h>
 #include <stdio.h>
@@ -63,11 +64,12 @@ void timec_refresh(void*);
 void timec_check(void*);
 void timec_rubbish_collect(void*);
 void timec_bgm(void*);
+void timec_superbullet(void*);
 void if_died(int);
 void LoadPeashooter();
 void PaintPeashooter();
 int get_perfect_shoot_arg(int);
-void heart(int, int, double);
+void heart(int x0, int y0, int size, COLORREF C);
 Zombie zombies[100];
 Bullet bullets[1000];
 Plant pea_shooter;
@@ -75,9 +77,17 @@ IMAGE zombie_img_black;
 IMAGE zombie_img_white;
 IMAGE bullet_img_black;
 IMAGE bullet_img_white;
+IMAGE fire_img_black;
+IMAGE fire_img_white;
+IMAGE grayfire_img_black;
+IMAGE grayfire_img_white;
+IMAGE gameover_img;
 IMAGE superbullet_img_black;
 IMAGE superbullet_img_white;
 IMAGE background;
 int zombie_num = 0;
+int dead_zombie_num = 0;
 int bullet_num = 0;
 int gameover = 0;
+int fire_available = 1;
+__int64 start_time = 0;

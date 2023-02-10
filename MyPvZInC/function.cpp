@@ -36,13 +36,19 @@ void refresh() {
 				cleardevice();
 			}
 		}
+		// 绘制技能
+		if (fire_available){
+			putimage(0, 500, &fire_img_white, SRCAND);
+			putimage(0, 500, &fire_img_black, SRCPAINT);
+		}
+		else {
+			putimage(0, 500, &grayfire_img_white, SRCAND);
+			putimage(0, 500, &grayfire_img_black, SRCPAINT);
+		}
 		EndBatchDraw();
 	}
 }
 
-int get_remain_time(int start_time){
-	return time(NULL) - start_time;
-}
 
 int place_zombie(Zombie zombies[], int zombie_num) {
 	/* 初始化随机数发生器 */
@@ -131,24 +137,50 @@ int get_perfect_shoot_arg(int line) {
 }
 
 // 绘制爱心函数
-void heart(int x, int y, double scale) {
-	setfillcolor(RED);
-	solidrectangle((x - 35) * scale, y * scale, (x + 35) * scale, (y + 90) * scale);
-	solidcircle((x - 45) * scale, y * scale, 55 * scale);
-	solidcircle((x + 45) * scale, y * scale, 55 * scale);
-	setlinecolor(COLORREF(BLACK));
-	for (int i = 0; i <= 35; i++) {
-		POINT pts1[] = { {(x - 70 - i * 1) * scale,(y - 50) * scale},
-						 {(x - 140 - i * 1) * scale,y * scale},
-						 {(x - 15 - i * 1) * scale,(y + 50) * scale},
-						 {(x - i * 1) * scale,(y + 90) * scale}
-		};
-		POINT pts2[] = { {(x + 70 + i * 1) * scale,(y - 50) * scale},
-						 {(x + 135 + i * 1) * scale,y * scale},
-						 {(x + 17 + i * 1) * scale,(y + 50) * scale},
-						 {(x + i * 1) * scale,(y + 90) * scale}
-		};
-		polybezier(pts1, 4);
-		polybezier(pts2, 4);
+void heart(int x0, int y0, int size, COLORREF C)
+{
+	double  m, n, x, y; double i;
+	for (i = 0; i <= 2 * size; i = i + 0.01)
+	{
+		//产生极坐标点
+		m = i;
+		n = -size * (((sin(i) * sqrt(fabs(cos(i)))) / (sin(i) + 1.4142)) - 2 * sin(i) + 2);
+		//转换为笛卡尔坐标
+		x = n * cos(m) + x0;
+		y = n * sin(m) + y0;
+		putpixel(x, y, C);
 	}
+}
+
+// 给排行榜排序，返回最高分
+int sort() {
+	FILE* fp;
+	fp = fopen("./list.txt", "r+");
+	int list[100] = { 0 };
+	int i = 0, t = 0;
+	char ch = 0;
+	if (fp != NULL) {
+		// 读入数据
+		while (fscanf(fp,"%d\n",&list[i]) != EOF) {
+			i++;
+		}
+		// 开始排序
+		for (int a = 0; a < i; a++) {
+			for (int b = a; b < i; b++) {
+				if (list[a] < list[b]) {
+					int tmp = list[a];
+					list[a] = list[b];
+					list[b] = tmp;
+				}
+			}
+		}
+		// 重新输出
+		rewind(fp);
+		for (int a = 0; a < i; a++) {
+			fprintf(fp, "%d\n", list[a]);
+		}
+		fclose(fp);
+		return list[0];
+	}
+	
 }
