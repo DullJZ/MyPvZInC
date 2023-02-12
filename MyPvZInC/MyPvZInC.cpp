@@ -134,11 +134,9 @@ void timec_move_zombie(void*) {
 void timec_cartoon(void*) {
 	while (!gameover) {
 		while (1){
-			for (int i = 0; i < 13; i++) {
-				Sleep(100);
-				//0-12内循环
-				pea_shooter.now_img_index = (pea_shooter.now_img_index + 1) % 13;
-			}
+			Sleep(100);
+			//0-12内循环
+			pea_shooter.now_img_index = (pea_shooter.now_img_index + 1) % 13;
 		}
 	}
 	_endthread();
